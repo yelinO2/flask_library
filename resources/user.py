@@ -1,5 +1,7 @@
 
+from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_restful import Resource, reqparse
+
 from models.user_model import UserModel
 
 class UserRegister(Resource):
@@ -40,3 +42,39 @@ class UserList(Resource):
     def get(self):
         users = UserModel.query.all()
         return {"users" : [user.json() for user in users]}
+
+class User(Resource):
+
+    @classmethod
+    def get(cls, uid):
+        user = UserModel.find_by_user_id(uid)
+        if not user:
+            return{"Message" : "User not Found!"}, 404
+        return user.json()
+
+    @classmethod
+    def delete(cls, uid):
+        user = UserModel.find_by_user_id(uid)
+        if not user:
+            return{"Message" : "User not Found!"}, 404
+        
+        user.delete_from_db()
+        return {"Message" : "User deleted successfully"}, 200
+
+class UserLogin(Resource):
+
+    @classmethod
+    def post(cls):
+        data = UserRegister.parser.parse_args()
+        user = UserModel.find_by_username(data['username'])
+
+        if user and user.password == data['password']:
+            access_token = create_access_token(identity=user.id, fresh= True)
+            refresh_token = create_refresh_token(user.id)
+
+            return{
+                "access_token" : access_token,
+                "refresh_token" : refresh_token
+            }, 200
+
+        return { "Message" : "Invalid User Credentials"}, 401
