@@ -7,7 +7,7 @@ from db import db
 from secutiy import authenticate, identity
 from resources.genre import Genre, GenreList, SearchGenre
 from resources.author import Authors, AuthorList, SearchAuthor
-from resources.user import UserRegister, UserList, User, UserLogin
+from resources.user import UserRegister, UserList, User
 from resources.book import Books, BookList, SearchByLang, SearchByBookName, DeleteBook
 
 app = Flask(__name__)
