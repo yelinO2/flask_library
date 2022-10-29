@@ -1,8 +1,8 @@
 from datetime import timedelta
 from flask import Flask
 from flask_restful import Api
-from flask_jwt import JWT
-# from flask_jwt_extended import JWTManager
+# from flask_jwt import JWT
+from flask_jwt_extended import JWTManager
 from db import db
 from secutiy import authenticate, identity
 from resources.genre import Genre, GenreList, SearchGenre
@@ -19,7 +19,7 @@ api = Api(app)
 app.secret_key = "not_today"
 # app.config['JWT_SECRET_KEY'] = 'not_today'
 # app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=2)
-JWT = JWT(app, authenticate, identity)
+# JWT = JWT(app, authenticate, identity)
 # jwt = JWTManager(app)
 
 api.add_resource(UserRegister, '/register') # user register
